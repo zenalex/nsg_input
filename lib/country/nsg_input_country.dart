@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:nsg_input/country/nsg_input_country_item.dart';
 import 'package:nsg_input/nsg_input.dart';
+import 'package:nsg_input/nsg_input_item.dart';
 
 class NsgInputCountry extends NsgInput {
   NsgInputCountry(
-      {ValueChanged<NsgInputCountryItem> onChanged,
-      ValueChanged<NsgInputCountryItem> onInit,
+      {ValueChanged<NsgInputItem> onChanged,
+      ValueChanged<NsgInputItem> onInit,
       NsgInputCountryItem initialSelection,
-      List<NsgInputCountryItem> elements = const [],
-      List<NsgInputCountryItem> favorite = const [],
+      List<NsgInputItem> elements = const [],
+      List<NsgInputItem> favorite = const [],
       TextStyle textStyle,
       EdgeInsetsGeometry padding = const EdgeInsets.all(0.0),
       bool showPictureOnly = false,
@@ -16,11 +17,11 @@ class NsgInputCountry extends NsgInput {
       TextStyle searchStyle,
       TextStyle dialogTextStyle,
       WidgetBuilder emptySearchBuilder,
-      Function(NsgInputCountryItem) builder,
+      Function(NsgInputItem) builder,
       bool enabled = true,
       TextOverflow textOverflow = TextOverflow.ellipsis,
       Size dialogSize,
-      List<NsgInputCountryItem> objectsFilter,
+      List<NsgInputItem> objectsFilter,
       bool alignLeft = false,
       bool showPicture = true,
       bool hideMainText = false,

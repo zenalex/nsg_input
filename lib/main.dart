@@ -49,12 +49,19 @@ class MyHomePage extends StatelessWidget {
   }
 
   Widget getInputCountry(BuildContext context) {
-    var list = List<NsgInputCountryItem>();
+    var list = List<NsgInputItem>();
     list.add(NsgInputCountryItem(name: "US"));
     list.add(NsgInputCountryItem(name: "RU"));
     list.add(NsgInputCountryItem(name: "BG"));
 
-    var input = NsgInputCountry(showPicture: true, elements: list);
+    var initValue = NsgInputCountryItem(name: "BG");
+
+    var input = NsgInputCountry(
+      showPicture: true,
+      elements: list,
+      initialSelection: initValue,
+      onChanged: (value) => print((value as NsgInputCountryItem).countryName),
+    );
     return input;
   }
 }

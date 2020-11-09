@@ -92,7 +92,7 @@ class NsgInput extends StatefulWidget {
 }
 
 class NsgInputState extends State<NsgInput> {
-  NsgInputItem selectedItem = NsgInputItem();
+  NsgInputItem selectedItem;
   List<NsgInputItem> elements = [];
   List<NsgInputItem> favoriteElements = [];
 
@@ -134,7 +134,7 @@ class NsgInputState extends State<NsgInput> {
               Flexible(
                 fit: widget.alignLeft ? FlexFit.tight : FlexFit.loose,
                 child: Text(
-                  selectedItem.presentation,
+                  selectedItem == null ? '' : selectedItem.presentation,
                   style: widget.textStyle ?? Theme.of(context).textTheme.button,
                   overflow: widget.textOverflow,
                 ),
@@ -178,7 +178,9 @@ class NsgInputState extends State<NsgInput> {
   void initState() {
     super.initState();
 
-    if (widget.initialSelection != null) {
+    if (elements.isEmpty) {
+      selectedItem = null;
+    } else if (widget.initialSelection != null) {
       selectedItem = elements.firstWhere((e) => (e == widget.initialSelection),
           orElse: () => elements[0]);
     } else {

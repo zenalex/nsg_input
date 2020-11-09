@@ -4,12 +4,13 @@ import 'package:nsg_input/nsg_input_item.dart';
 /// Input element. This is the element that contains all the information
 class NsgInputCountryItem extends NsgInputItem {
   @override
-  String toString() => "$name";
-  String countryName;
+  String toString() => '$name';
+  String countryName = '';
   @override
   String get presentation => countryName == '' ? name : countryName;
+  final tag;
 
-  NsgInputCountryItem({String name}) : super(name: name) {
+  NsgInputCountryItem({String name, this.tag}) : super(name: name) {
     name = name.toUpperCase();
     this.name = name;
     assert(NsgCountries.countries.countryList.containsKey(name),
@@ -19,6 +20,13 @@ class NsgInputCountryItem extends NsgInputItem {
     imagePath = country.getPicture();
     linkedObject = country;
   }
+
+  // @override
+  // bool operator ==(Object other) =>
+  //     other is NsgInputCountryItem && other.countryName == countryName;
+
+  // @override
+  // int get hashCode => countryName.hashCode;
 
   static NsgInputCountryItem createFromCountry(NsgCountry country) {
     return NsgInputCountryItem(name: country.countryCode);
