@@ -28,6 +28,7 @@ dependencies:
   nsg_data:
     path: ../../nsg_data
   get: ^3.13.2
+  retry: ^3.0.1
 
 
   # The following adds the Cupertino Icons font to your application.
