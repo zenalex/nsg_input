@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:example/model/inputController.dart';
+import 'package:nsg_input/nsg_input.dart';
 
 import 'model/countryController.dart';
 
 class InputWidget extends GetView<InputController> {
   @override
   Widget build(BuildContext context) {
-    final countryController = Get.find<CountryController>();
     return Scaffold(
         appBar: AppBar(title: Text('Test NsgInput page'), centerTitle: true),
         backgroundColor: Colors.blue,
@@ -17,10 +17,7 @@ class InputWidget extends GetView<InputController> {
               color: Colors.blue,
             ),
             child: Center(
-              child: countryController.obx((state) => ListView.builder(
-                  itemCount: countryController.items.length,
-                  itemBuilder: (context, i) =>
-                      getCountryItem(context, i, countryController))),
+              child: getinputCountry(context),
               //GetBuilder<NsgController>(builder: null, didChangeDependencies: ,)
             )));
   }
@@ -30,5 +27,18 @@ class InputWidget extends GetView<InputController> {
     return ListTile(
       title: Text(countryController.items[i].title),
     );
+  }
+
+  Widget getListView(BuildContext context) {
+    final countryController = Get.find<CountryController>();
+    return countryController.obx((state) => ListView.builder(
+        itemCount: countryController.items.length,
+        itemBuilder: (context, i) =>
+            getCountryItem(context, i, countryController)));
+  }
+
+  Widget getinputCountry(BuildContext context) {
+    final countryController = Get.find<CountryController>();
+    return NsgInput(dataController: countryController);
   }
 }

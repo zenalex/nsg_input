@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nsg_data/nsg_data.dart';
-import 'package:nsg_input/country/nsg_input_country_item.dart';
 import 'package:nsg_input/nsg_input.dart';
-import 'package:nsg_input/nsg_input_item.dart';
 
 class NsgInputCountry extends NsgInput {
   NsgInputCountry(
       {ValueChanged<NsgDataItem> onChanged,
       ValueChanged<NsgDataItem> onInit,
-      NsgDataItem initialSelection,
-      List<NsgDataItem> elements = const [],
       List<NsgDataItem> favorite = const [],
       TextStyle textStyle,
       EdgeInsetsGeometry padding = const EdgeInsets.all(0.0),
@@ -32,10 +28,6 @@ class NsgInputCountry extends NsgInput {
       bool hideSearch = false,
       Key key})
       : super(
-            onChanged: onChanged,
-            onInit: onInit,
-            initialSelection: initialSelection,
-            elements: elements,
             favorite: favorite,
             textStyle: textStyle,
             padding: padding,

@@ -6,10 +6,6 @@ import 'package:nsg_data/nsg_data.dart';
 import 'nsg_selection_dialog.dart';
 
 class NsgInput extends StatelessWidget {
-  final ValueChanged<NsgDataItem> onChanged;
-  final ValueChanged<NsgDataItem> onInit;
-  final NsgDataItem initialSelection;
-  final List<NsgDataItem> elements;
   final List<NsgDataItem> favorite;
   final NsgBaseController dataController;
 
@@ -56,14 +52,10 @@ class NsgInput extends StatelessWidget {
   /// Set to true if you want to hide the search part
   final bool hideSearch;
 
-  List<NsgDataItem> favoriteElements = [];
+  final List<NsgDataItem> favoriteElements = [];
 
   NsgInput({
     this.dataController,
-    this.onChanged,
-    this.onInit,
-    this.initialSelection,
-    this.elements = const [],
     this.favorite = const [],
     this.textStyle,
     this.padding = const EdgeInsets.all(0.0),
@@ -141,7 +133,7 @@ class NsgInput extends StatelessWidget {
     showDialog(
       context: context,
       builder: (_) => NsgSelectionDialog(
-        elements,
+        dataController.itemList,
         favoriteElements,
         emptySearchBuilder: emptySearchBuilder,
         searchDecoration: searchDecoration,
@@ -153,12 +145,6 @@ class NsgInput extends StatelessWidget {
         hideSearch: hideSearch,
       ),
     );
-  }
-
-  void _onInit(NsgDataItem e) {
-    if (onInit != null) {
-      onInit(e);
-    }
   }
 
   Image getImage(NsgDataItem selectedItem) {}

@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nsg_data/nsg_data.dart';
-import 'package:nsg_input/nsg_input_item.dart';
 
 /// selection dialog used for selection of the country code
 class NsgSelectionDialog extends StatefulWidget {

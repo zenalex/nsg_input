@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nsg_data/nsg_data.dart';
 
 /// Input element. This is the element that contains all the information
 class NsgInputItem2 {
@@ -34,7 +33,7 @@ class NsgInputItem2 {
   String toString() => "$name";
   String get presentation => toString();
 
-  NsgInputItem({String name, Image picture, Object linkedObject}) {
+  NsgInputItem2({String name, Image picture, Object linkedObject}) {
     this.name = name;
     this.picture = picture;
     this.linkedObject = linkedObject;
