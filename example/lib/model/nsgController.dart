@@ -8,15 +8,16 @@ class NsgDataController<T extends NsgDataItem> extends NsgBaseController {
   List<T> get items => dataItemList.cast<T>();
 
   NsgDataController(
-      {bool requestOnInit,
-      bool useUpdate,
-      bool useChange,
+      {bool requestOnInit = true,
+      bool useUpdate = false,
+      bool useChange = true,
       List<String> builderIDs,
       NsgBaseController masterController,
       NsgDataBinding dataBindign,
-      bool autoRepeate,
-      int autoRepeateCount})
+      bool autoRepeate = false,
+      int autoRepeateCount = 10})
       : super(
+            dataType: T,
             requestOnInit: requestOnInit,
             useUpdate: useUpdate,
             useChange: useChange,
@@ -29,6 +30,7 @@ class NsgDataController<T extends NsgDataItem> extends NsgBaseController {
 
 class NsgBaseController extends GetxController
     with StateMixin<NsgBaseControllerData> {
+  Type dataType;
   bool requestOnInit;
 
   ///Use update method on data update
@@ -71,14 +73,15 @@ class NsgBaseController extends GetxController
   void Function(NsgDataItem selectedItem) selectedItemChanged;
 
   NsgBaseController(
-      {this.requestOnInit,
-      this.useUpdate,
-      this.useChange,
+      {this.dataType,
+      this.requestOnInit = true,
+      this.useUpdate = false,
+      this.useChange = true,
       this.builderIDs,
       this.masterController,
       this.dataBinding,
-      this.autoRepeate,
-      this.autoRepeateCount})
+      this.autoRepeate = false,
+      this.autoRepeateCount = 10})
       : super();
 
   @override
@@ -109,7 +112,8 @@ class NsgBaseController extends GetxController
 
   void _requestItems() async {
     try {
-      var request = NsgDataRequest(dataItemType: selectedItem.runtimeType);
+      assert(dataType != null);
+      var request = NsgDataRequest(dataItemType: dataType);
       var newItemsList = await request.requestItems(
           filter: getRequestFilter, loadReference: referenceList);
       //service method for descendants
