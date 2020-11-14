@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:nsg_data/nsg_data.dart';
 import 'package:nsg_input/nsg_input_item.dart';
 
 /// selection dialog used for selection of the country code
 class NsgSelectionDialog extends StatefulWidget {
-  final List<NsgInputItem> elements;
+  final List<NsgDataItem> elements;
   final InputDecoration searchDecoration;
   final TextStyle searchStyle;
   final TextStyle textStyle;
@@ -15,7 +16,7 @@ class NsgSelectionDialog extends StatefulWidget {
   final bool hideSearch;
 
   /// elements passed as favorite
-  final List<NsgInputItem> favoriteElements;
+  final List<NsgDataItem> favoriteElements;
 
   NsgSelectionDialog(
     this.elements,
@@ -40,7 +41,7 @@ class NsgSelectionDialog extends StatefulWidget {
 
 class _NsgSelectionDialogState extends State<NsgSelectionDialog> {
   /// this is useful for filtering purpose
-  List<NsgInputItem> filteredElements;
+  List<NsgDataItem> filteredElements;
 
   @override
   Widget build(BuildContext context) => SimpleDialog(
@@ -96,7 +97,7 @@ class _NsgSelectionDialogState extends State<NsgSelectionDialog> {
                 else
                   ...filteredElements.map(
                     (e) => SimpleDialogOption(
-                      key: Key(e.presentation),
+                      key: Key(e.toString()), //TODO: presentation
                       child: _buildOption(e),
                       onPressed: () {
                         _selectItem(e);
@@ -109,7 +110,7 @@ class _NsgSelectionDialogState extends State<NsgSelectionDialog> {
         ],
       );
 
-  Widget _buildOption(NsgInputItem e) {
+  Widget _buildOption(NsgDataItem e) {
     return Container(
       width: 400,
       child: Flex(
@@ -120,7 +121,7 @@ class _NsgSelectionDialogState extends State<NsgSelectionDialog> {
               child: Padding(
                 padding: const EdgeInsets.only(right: 16.0),
                 child: SizedBox(
-                  child: e.picture,
+                  child: Text(e.toString()), //TODO: prersentation
                   width: widget.pictureWidth,
                 ),
               ),
@@ -128,7 +129,7 @@ class _NsgSelectionDialogState extends State<NsgSelectionDialog> {
           Expanded(
             flex: 4,
             child: Text(
-              e.presentation,
+              e.toString(), //TODO: presentation
               overflow: TextOverflow.fade,
               style: widget.textStyle,
             ),
@@ -158,12 +159,12 @@ class _NsgSelectionDialogState extends State<NsgSelectionDialog> {
     s = s.toUpperCase();
     setState(() {
       filteredElements = widget.elements
-          .where((e) => e.name.toUpperCase().contains(s))
+          .where((e) => e.toString().toUpperCase().contains(s))
           .toList();
     });
   }
 
-  void _selectItem(NsgInputItem e) {
+  void _selectItem(NsgDataItem e) {
     Navigator.pop(context, e);
   }
 }

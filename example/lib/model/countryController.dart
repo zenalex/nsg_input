@@ -1,6 +1,6 @@
 import 'package:example/model/countryItem.dart';
 
-import 'nsgController.dart';
+import 'package:nsg_data/nsg_data.dart';
 
 class CountryController extends NsgDataController<CountryItem> {
   CountryController()

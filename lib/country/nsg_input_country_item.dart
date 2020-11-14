@@ -2,7 +2,7 @@ import 'package:nsg_input/country/nsg_input_all_countries.dart';
 import 'package:nsg_input/nsg_input_item.dart';
 
 /// Input element. This is the element that contains all the information
-class NsgInputCountryItem extends NsgInputItem {
+class NsgInputCountryItem extends NsgInputItem2 {
   @override
   String toString() => '$name';
   String countryName = '';
@@ -10,7 +10,7 @@ class NsgInputCountryItem extends NsgInputItem {
   String get presentation => countryName == '' ? name : countryName;
   final tag;
 
-  NsgInputCountryItem({String name, this.tag}) : super(name: name) {
+  NsgInputCountryItem({String name, this.tag}) : super() {
     name = name.toUpperCase();
     this.name = name;
     assert(NsgCountries.countries.countryList.containsKey(name),

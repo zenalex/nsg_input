@@ -1,16 +1,17 @@
-library country_code_picker;
+library nsg_input;
 
 import 'package:flutter/material.dart';
-import 'package:nsg_input/nsg_input_item.dart';
+import 'package:nsg_data/nsg_data.dart';
 
 import 'nsg_selection_dialog.dart';
 
-class NsgInput extends StatefulWidget {
-  final ValueChanged<NsgInputItem> onChanged;
-  final ValueChanged<NsgInputItem> onInit;
-  final NsgInputItem initialSelection;
-  final List<NsgInputItem> elements;
-  final List<NsgInputItem> favorite;
+class NsgInput extends StatelessWidget {
+  final ValueChanged<NsgDataItem> onChanged;
+  final ValueChanged<NsgDataItem> onInit;
+  final NsgDataItem initialSelection;
+  final List<NsgDataItem> elements;
+  final List<NsgDataItem> favorite;
+  final NsgBaseController dataController;
 
   ///Text style. By default Theme.of(context).textTheme.button
   final TextStyle textStyle;
@@ -20,7 +21,7 @@ class NsgInput extends StatefulWidget {
   final TextStyle searchStyle;
   final TextStyle dialogTextStyle;
   final WidgetBuilder emptySearchBuilder;
-  final Function(NsgInputItem) builder;
+  final Function(NsgDataItem) builder;
   final bool enabled;
   final TextOverflow textOverflow;
 
@@ -28,7 +29,7 @@ class NsgInput extends StatefulWidget {
   final Size dialogSize;
 
   /// used to customize the country list
-  final List<NsgInputItem> objectsFilter;
+  final List<NsgDataItem> objectsFilter;
 
   /// aligns the flag and the Text left
   ///
@@ -55,7 +56,10 @@ class NsgInput extends StatefulWidget {
   /// Set to true if you want to hide the search part
   final bool hideSearch;
 
+  List<NsgDataItem> favoriteElements = [];
+
   NsgInput({
+    this.dataController,
     this.onChanged,
     this.onInit,
     this.initialSelection,
@@ -85,58 +89,45 @@ class NsgInput extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    //return CountryCodePickerState(elements);
-    return NsgInputState(elements);
-  }
-}
-
-class NsgInputState extends State<NsgInput> {
-  NsgInputItem selectedItem;
-  List<NsgInputItem> elements = [];
-  List<NsgInputItem> favoriteElements = [];
-
-  NsgInputState(this.elements);
-
-  @override
   Widget build(BuildContext context) {
     Widget _widget;
-    if (widget.builder != null)
+    if (builder != null)
       _widget = InkWell(
-        onTap: showCountryCodePickerDialog,
-        child: widget.builder(selectedItem),
+        onTap: () => showCountryCodePickerDialog(context),
+        child: builder(dataController.selectedItem),
       );
     else {
       _widget = FlatButton(
-        padding: widget.padding,
-        onPressed: widget.enabled ? showCountryCodePickerDialog : null,
+        padding: padding,
+        onPressed: enabled ? () => showCountryCodePickerDialog(context) : null,
         child: Flex(
           direction: Axis.horizontal,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            if (widget.showPictureMain != null
-                ? widget.showPictureMain
-                : widget.showPicture)
+            if (showPictureMain != null ? showPictureMain : showPicture)
               Flexible(
-                flex: widget.alignLeft ? 0 : 1,
-                fit: widget.alignLeft ? FlexFit.tight : FlexFit.loose,
+                flex: alignLeft ? 0 : 1,
+                fit: alignLeft ? FlexFit.tight : FlexFit.loose,
                 child: Padding(
-                  padding: widget.alignLeft
+                  padding: alignLeft
                       ? const EdgeInsets.only(right: 16.0, left: 8.0)
                       : const EdgeInsets.only(right: 16.0),
                   child: SizedBox(
-                    child: selectedItem.picture,
-                    width: widget.pictureWidth,
+                    child: getImage(dataController.selectedItem),
+                    width: pictureWidth,
                   ), //Рассчитать высоту картинки
                 ),
               ),
-            if (!widget.hideMainText)
+            if (!hideMainText)
               Flexible(
-                fit: widget.alignLeft ? FlexFit.tight : FlexFit.loose,
+                fit: alignLeft ? FlexFit.tight : FlexFit.loose,
                 child: Text(
-                  selectedItem == null ? '' : selectedItem.presentation,
-                  style: widget.textStyle ?? Theme.of(context).textTheme.button,
-                  overflow: widget.textOverflow,
+                  dataController.selectedItem == null
+                      ? ''
+                      : dataController.selectedItem
+                          .toString(), //TODO: presentation
+                  style: textStyle ?? Theme.of(context).textTheme.button,
+                  overflow: textOverflow,
                 ),
               ),
           ],
@@ -146,94 +137,29 @@ class NsgInputState extends State<NsgInput> {
     return _widget;
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    //this.elements = elements.map((e) => e.localize(context)).toList();
-    _onInit(selectedItem);
-  }
-
-  @override
-  void didUpdateWidget(NsgInput oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.initialSelection != widget.initialSelection) {
-      //if (widget.initialSelection != null) {
-      //   selectedItem = elements.firstWhere(
-      //       (e) =>
-      //           (e.code.toUpperCase() ==
-      //               widget.initialSelection.toUpperCase()) ||
-      //           (e.dialCode == widget.initialSelection) ||
-      //           (e.name.toUpperCase() == widget.initialSelection.toUpperCase()),
-      //       orElse: () => elements[0]);
-      // } else {
-      //   selectedItem = elements[0];
-      //}
-      _onInit(selectedItem);
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    if (elements.isEmpty) {
-      selectedItem = null;
-    } else if (widget.initialSelection != null) {
-      selectedItem = elements.firstWhere((e) => (e == widget.initialSelection),
-          orElse: () => elements[0]);
-    } else {
-      selectedItem = elements[0];
-    }
-
-    //   favoriteElements = elements
-    //       .where((e) =>
-    //           widget.favorite.firstWhere(
-    //               (f) =>
-    //                   e.code.toUpperCase() == f.toUpperCase() ||
-    //                   e.dialCode == f ||
-    //                   e.name.toUpperCase() == f.toUpperCase(),
-    //               orElse: () => null) !=
-    //           null)
-    //       .toList();
-  }
-
-  void showCountryCodePickerDialog() {
+  void showCountryCodePickerDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (_) => NsgSelectionDialog(
         elements,
         favoriteElements,
-        emptySearchBuilder: widget.emptySearchBuilder,
-        searchDecoration: widget.searchDecoration,
-        searchStyle: widget.searchStyle,
-        textStyle: widget.dialogTextStyle,
-        showPicture: widget.showPicture != null ? widget.showPicture : false,
-        pictureWidth: widget.pictureWidth,
-        size: widget.dialogSize,
-        hideSearch: widget.hideSearch,
+        emptySearchBuilder: emptySearchBuilder,
+        searchDecoration: searchDecoration,
+        searchStyle: searchStyle,
+        textStyle: dialogTextStyle,
+        showPicture: showPicture != null ? showPicture : false,
+        pictureWidth: pictureWidth,
+        size: dialogSize,
+        hideSearch: hideSearch,
       ),
-    ).then((e) {
-      if (e != null) {
-        setState(() {
-          selectedItem = e;
-        });
-
-        _publishSelection(e);
-      }
-    });
+    );
   }
 
-  void _publishSelection(NsgInputItem e) {
-    if (widget.onChanged != null) {
-      widget.onChanged(e);
+  void _onInit(NsgDataItem e) {
+    if (onInit != null) {
+      onInit(e);
     }
   }
 
-  void _onInit(NsgInputItem e) {
-    if (widget.onInit != null) {
-      widget.onInit(e);
-    }
-  }
+  Image getImage(NsgDataItem selectedItem) {}
 }

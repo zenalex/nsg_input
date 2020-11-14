@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:nsg_data/nsg_data.dart';
 
 /// Input element. This is the element that contains all the information
-class NsgInputItem {
+class NsgInputItem2 {
   /// text representation
   String name = '';
   Object get linkedObject => _linkedObject;
@@ -13,12 +14,6 @@ class NsgInputItem {
   Object _linkedObject;
   String imagePath;
   Image _picture;
-
-  @override
-  bool operator ==(Object other) => other is NsgInputItem && other.name == name;
-
-  @override
-  int get hashCode => name.hashCode;
 
   Image get picture {
     if (_picture == null) {

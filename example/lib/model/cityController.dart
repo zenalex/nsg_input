@@ -1,7 +1,6 @@
 import 'cityItem.dart';
 import 'countryItem.dart';
-import 'nsgController.dart';
-import 'nsgDataBinding.dart';
+import 'package:nsg_data/nsg_data.dart';
 
 class CityController extends NsgDataController<CityItem> {
   CityController(NsgDataController<CountryItem> masterController)
