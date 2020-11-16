@@ -1,16 +1,18 @@
 import 'package:nsg_data/dataFields/stringField.dart';
-import 'package:nsg_data/nsg_data_item.dart';
+import 'package:nsg_data/nsg_data.dart';
+
+import 'countryItem.dart';
 
 class CityItem extends NsgDataItem {
-  static String get name_id => 'Id';
-  static String get name_title => 'Title';
-  static String get name_countryId => 'CountryId';
+  static const name_id = 'Id';
+  static const name_title = 'Title';
+  static const name_countryId = 'CountryId';
 
   @override
   void initialize() {
     addfield(NsgDataStringField(name_id), primaryKey: true);
     addfield(NsgDataStringField(name_title));
-    addfield(NsgDataStringField(name_countryId));
+    addfield(NsgDataReferenceField<CountryItem>(name_countryId));
   }
 
   @override
@@ -22,9 +24,22 @@ class CityItem extends NsgDataItem {
   set title(String value) => setFieldValue(name_title, value);
   String get countryId => getFieldValue(name_countryId).toString();
   set countryId(String value) => setFieldValue(name_countryId, value);
+  CountryItem get country => getReferent<CountryItem>(name_countryId);
+  Future<CountryItem> countryAsync() async {
+    return await getReferentAsync<CountryItem>(name_countryId);
+  }
 
   @override
   String get apiRequestItems {
     return '/Api/Data/GetCity';
+  }
+
+  @override
+  String toString() {
+    if (isEmpty) {
+      return super.toString();
+    } else {
+      return title;
+    }
   }
 }

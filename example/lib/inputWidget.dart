@@ -4,6 +4,8 @@ import 'package:example/model/inputController.dart';
 import 'package:nsg_input/nsg_input.dart';
 
 import 'model/countryController.dart';
+import 'model/cityController.dart';
+import 'model/countryItem.dart';
 
 class InputWidget extends GetView<InputController> {
   @override
@@ -17,7 +19,10 @@ class InputWidget extends GetView<InputController> {
               color: Colors.blue,
             ),
             child: Center(
-              child: getinputCountry(context),
+              child: Column(children: [
+                getinputCountry(context),
+                getinputCity(context),
+              ]),
               //GetBuilder<NsgController>(builder: null, didChangeDependencies: ,)
             )));
   }
@@ -39,6 +44,15 @@ class InputWidget extends GetView<InputController> {
 
   Widget getinputCountry(BuildContext context) {
     final countryController = Get.find<CountryController>();
+    return NsgInput(
+      dataController: countryController,
+      flagFieldName: CountryItem.name_countryCode,
+      showPicture: true,
+    );
+  }
+
+  Widget getinputCity(BuildContext context) {
+    final countryController = Get.find<CityController>();
     return NsgInput(dataController: countryController);
   }
 }

@@ -134,6 +134,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.6"
+  event:
+    dependency: transitive
+    description:
+      name: event
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.4"
   fake_async:
     dependency: transitive
     description:
@@ -183,7 +190,7 @@ packages:
       name: get
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.15.0"
+    version: "3.17.1"
   glob:
     dependency: transitive
     description:
@@ -295,7 +302,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.0.0+1"
+    version: "0.1.0+1"
   package_config:
     dependency: transitive
     description:

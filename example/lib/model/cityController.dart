@@ -8,8 +8,15 @@ class CityController extends NsgDataController<CityItem> {
             requestOnInit: true,
             autoRepeate: true,
             autoRepeateCount: 1000,
-            masterController: masterController) {
+            masterController: masterController,
+            useDataCache: true) {
     dataBinding = NsgDataBinding();
     dataBinding.masterFieldName = CountryItem.name_id;
+    dataBinding.slaveFieldName = CityItem.name_countryId;
+  }
+
+  @override
+  void afterUpdate() {
+    super.afterUpdate();
   }
 }

@@ -27,4 +27,13 @@ class CountryItem extends NsgDataItem {
   String get apiRequestItems {
     return '/Api/Data/GetCountry';
   }
+
+  @override
+  String toString() {
+    if (isEmpty) {
+      return super.toString();
+    } else {
+      return title;
+    }
+  }
 }

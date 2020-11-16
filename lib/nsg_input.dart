@@ -2,8 +2,9 @@ library nsg_input;
 
 import 'package:flutter/material.dart';
 import 'package:nsg_data/nsg_data.dart';
-
+import 'package:get/get.dart';
 import 'nsg_selection_dialog.dart';
+import 'country/nsgFlags.dart';
 
 class NsgInput extends StatelessWidget {
   final List<NsgDataItem> favorite;
@@ -53,6 +54,10 @@ class NsgInput extends StatelessWidget {
   final bool hideSearch;
 
   final List<NsgDataItem> favoriteElements = [];
+  final Image Function(
+      NsgDataItem selectedItem, String fieldName, String packageName) getImage;
+  final String flagFieldName;
+  final String packageName;
 
   NsgInput({
     this.dataController,
@@ -65,7 +70,7 @@ class NsgInput extends StatelessWidget {
     this.dialogTextStyle,
     this.emptySearchBuilder,
     this.alignLeft = false,
-    this.showPicture = true,
+    this.showPicture = false,
     this.showPictureDialog,
     this.hideMainText = false,
     this.showPictureMain,
@@ -77,6 +82,9 @@ class NsgInput extends StatelessWidget {
     this.objectsFilter,
     this.hideSearch = false,
     this.dialogSize,
+    this.getImage = NsgFlags.getImage,
+    this.flagFieldName,
+    this.packageName = 'nsg_input',
     Key key,
   }) : super(key: key);
 
@@ -90,41 +98,48 @@ class NsgInput extends StatelessWidget {
       );
     else {
       _widget = FlatButton(
-        padding: padding,
-        onPressed: enabled ? () => showCountryCodePickerDialog(context) : null,
-        child: Flex(
-          direction: Axis.horizontal,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            if (showPictureMain != null ? showPictureMain : showPicture)
-              Flexible(
-                flex: alignLeft ? 0 : 1,
-                fit: alignLeft ? FlexFit.tight : FlexFit.loose,
-                child: Padding(
-                  padding: alignLeft
-                      ? const EdgeInsets.only(right: 16.0, left: 8.0)
-                      : const EdgeInsets.only(right: 16.0),
-                  child: SizedBox(
-                    child: getImage(dataController.selectedItem),
-                    width: pictureWidth,
-                  ), //Рассчитать высоту картинки
-                ),
-              ),
-            if (!hideMainText)
-              Flexible(
-                fit: alignLeft ? FlexFit.tight : FlexFit.loose,
-                child: Text(
-                  dataController.selectedItem == null
-                      ? ''
-                      : dataController.selectedItem
-                          .toString(), //TODO: presentation
-                  style: textStyle ?? Theme.of(context).textTheme.button,
-                  overflow: textOverflow,
-                ),
-              ),
-          ],
-        ),
-      );
+          padding: padding,
+          onPressed:
+              enabled ? () => showCountryCodePickerDialog(context) : null,
+          child: dataController.obx(
+            (state) => Flex(
+              direction: Axis.horizontal,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                if (showPictureMain != null ? showPictureMain : showPicture)
+                  Flexible(
+                    flex: alignLeft ? 0 : 1,
+                    fit: alignLeft ? FlexFit.tight : FlexFit.loose,
+                    child: Padding(
+                      padding: alignLeft
+                          ? const EdgeInsets.only(right: 16.0, left: 8.0)
+                          : const EdgeInsets.only(right: 16.0),
+                      child: SizedBox(
+                        child: getImage(dataController.selectedItem,
+                                flagFieldName, packageName) ??
+                            Image.asset(
+                              'lib/assets/nodata.jpg',
+                              package: packageName,
+                            ),
+                        width: pictureWidth,
+                      ), //Рассчитать высоту картинки
+                    ),
+                  ),
+                if (!hideMainText)
+                  Flexible(
+                    fit: alignLeft ? FlexFit.tight : FlexFit.loose,
+                    child: Text(
+                      dataController.selectedItem == null
+                          ? 'Select item'
+                          : dataController.selectedItem
+                              .toString(), //TODO: presentation
+                      style: textStyle ?? Theme.of(context).textTheme.button,
+                      overflow: textOverflow,
+                    ),
+                  ),
+              ],
+            ),
+          ));
     }
     return _widget;
   }
@@ -133,7 +148,7 @@ class NsgInput extends StatelessWidget {
     showDialog(
       context: context,
       builder: (_) => NsgSelectionDialog(
-        dataController.itemList,
+        dataController,
         favoriteElements,
         emptySearchBuilder: emptySearchBuilder,
         searchDecoration: searchDecoration,
@@ -143,9 +158,10 @@ class NsgInput extends StatelessWidget {
         pictureWidth: pictureWidth,
         size: dialogSize,
         hideSearch: hideSearch,
+        getImage: getImage,
+        flagFieldName: flagFieldName,
+        packageName: packageName,
       ),
     );
   }
-
-  Image getImage(NsgDataItem selectedItem) {}
 }

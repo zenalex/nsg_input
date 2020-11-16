@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nsg_data/nsg_data.dart';
+import 'country/nsgFlags.dart';
 
 /// selection dialog used for selection of the country code
 class NsgSelectionDialog extends StatefulWidget {
-  final List<NsgDataItem> elements;
+  final NsgBaseController dataController;
   final InputDecoration searchDecoration;
   final TextStyle searchStyle;
   final TextStyle textStyle;
@@ -13,12 +14,16 @@ class NsgSelectionDialog extends StatefulWidget {
   final double pictureWidth;
   final Size size;
   final bool hideSearch;
+  final Image Function(
+      NsgDataItem selectedItem, String fieldName, String packageName) getImage;
+  final String flagFieldName;
+  final String packageName;
 
   /// elements passed as favorite
   final List<NsgDataItem> favoriteElements;
 
   NsgSelectionDialog(
-    this.elements,
+    this.dataController,
     this.favoriteElements, {
     Key key,
     this.emptySearchBuilder,
@@ -29,6 +34,9 @@ class NsgSelectionDialog extends StatefulWidget {
     this.pictureWidth = 32,
     this.size,
     this.hideSearch = false,
+    this.getImage = NsgFlags.getImage,
+    this.flagFieldName,
+    this.packageName = 'nsg_input',
   })  : assert(searchDecoration != null, 'searchDecoration must not be null!'),
         this.searchDecoration =
             searchDecoration.copyWith(prefixIcon: Icon(Icons.search)),
@@ -120,7 +128,8 @@ class _NsgSelectionDialogState extends State<NsgSelectionDialog> {
               child: Padding(
                 padding: const EdgeInsets.only(right: 16.0),
                 child: SizedBox(
-                  child: Text(e.toString()), //TODO: prersentation
+                  child: NsgFlags.getImage(
+                      e, widget.flagFieldName, widget.packageName),
                   width: widget.pictureWidth,
                 ),
               ),
@@ -150,20 +159,21 @@ class _NsgSelectionDialogState extends State<NsgSelectionDialog> {
 
   @override
   void initState() {
-    filteredElements = widget.elements;
+    filteredElements = widget.dataController.dataItemList;
     super.initState();
   }
 
   void _filterElements(String s) {
     s = s.toUpperCase();
     setState(() {
-      filteredElements = widget.elements
+      filteredElements = widget.dataController.dataItemList
           .where((e) => e.toString().toUpperCase().contains(s))
           .toList();
     });
   }
 
   void _selectItem(NsgDataItem e) {
+    widget.dataController.selectedItem = e;
     Navigator.pop(context, e);
   }
 }
