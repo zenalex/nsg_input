@@ -1,5 +1,4 @@
-import 'package:nsg_data/dataFields/stringField.dart';
-import 'package:nsg_data/nsg_data_item.dart';
+import 'package:nsg_data/nsg_data.dart';
 
 class CountryItem extends NsgDataItem {
   static const name_id = 'Id';
