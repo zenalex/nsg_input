@@ -11,8 +11,8 @@ class CityController extends NsgDataController<CityItem> {
             masterController: masterController,
             useDataCache: true) {
     dataBinding = NsgDataBinding();
-    dataBinding.masterFieldName = CountryItem.name_id;
-    dataBinding.slaveFieldName = CityItem.name_countryId;
+    dataBinding!.masterFieldName = CountryItem.name_id;
+    dataBinding!.slaveFieldName = CityItem.name_countryId;
   }
 
   @override

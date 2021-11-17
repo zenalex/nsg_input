@@ -8,14 +8,11 @@ import 'package:nsg_data/nsg_data.dart';
 
 class InputController extends GetxController
     with StateMixin<InputControllerData> {
-  NsgDataProvider provider;
+  late NsgDataProvider provider;
   @override
   void onInit() async {
     super.onInit();
 
-    if (provider != null) {
-      return;
-    }
     provider = NsgDataProvider();
     provider.serverUri = 'http://alex.nsgsoft.ru:5073';
 
@@ -26,16 +23,17 @@ class InputController extends GetxController
     NsgDataClient.client
         .registerDataItem(CountryItem(), remoteProvider: provider);
 
+    //TODO: непонятно зачем. Разобраться, переделать
     //await provider.resetUserToken();
-    await provider.connect();
+    //await provider.connect();
 
-    if (provider.isAnonymous) {
-      await Get.to(NsgPhoneLoginPage(provider,
-              widgetParams: NsgPhoneLoginParams.defaultParams))
-          .then((value) => loadData());
-    } else {
-      await loadData();
-    }
+    // if (provider.isAnonymous) {
+    //   await Get.to(NsgPhoneLoginPage(provider,
+    //           widgetParams: NsgPhoneLoginParams.defaultParams))
+    //       .then((value) => loadData());
+    // } else {
+    //   await loadData();
+    // }
   }
 
   Future loadData() async {
@@ -59,5 +57,5 @@ class InputController extends GetxController
 }
 
 class InputControllerData {
-  UserSettingsItem userSettings;
+  UserSettingsItem? userSettings;
 }
