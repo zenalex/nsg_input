@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:example/model/inputController.dart';
-import 'package:nsg_input/nsg_input.dart';
+//import 'package:nsg_input/nsg_input.dart';
 
 import 'model/countryController.dart';
 import 'model/cityController.dart';
@@ -44,15 +44,19 @@ class InputWidget extends GetView<InputController> {
 
   Widget getinputCountry(BuildContext context) {
     final countryController = Get.find<CountryController>();
-    return NsgInput(
-      dataController: countryController,
-      flagFieldName: CountryItem.name_countryCode,
-      showPicture: true,
-    );
+    return Text("СТРАНА");
+    //TODO: отключил
+    // NsgInput(
+    //   dataController: countryController,
+    //   flagFieldName: CountryItem.name_countryCode,
+    //   showPicture: true,
+    // );
   }
 
   Widget getinputCity(BuildContext context) {
     final countryController = Get.find<CityController>();
-    return NsgInput(dataController: countryController);
+    return Text("Страна");
+    //TODO: отключил
+    //return NsgInput(dataController: countryController);
   }
 }
